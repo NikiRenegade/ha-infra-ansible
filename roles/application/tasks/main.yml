@@ -1,3 +1,7 @@
+- name: Получение IP из группы app
+  set_fact:
+    haproxy_ip: "{{ groups['haproxy'][0] }}"
+
 - name: Установка openjdk-17-jre
   apt:
     name: openjdk-17-jre
@@ -13,6 +17,14 @@
   copy:
     src: app
     dest: /opt
+
+- name: Установка конфигурации приложения
+  template:
+    src: application.properties.j2
+    dest: /opt/app/application.properties
+    owner: root
+    group: root
+    mode: '0644'
 
 - name: Создание unit файла
   template:

@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User=root
-ExecStart=/usr/bin/java -jar /opt/app/application.jar
+ExecStart=/usr/bin/java -jar /opt/app/application.jar --spring.config.location=/opt/app/application.properties
 SuccessExitStatus=143
 
 [Install]
