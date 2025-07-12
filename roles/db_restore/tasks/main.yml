@@ -1,0 +1,23 @@
+- name: Установка jq
+  apt:
+    name: jq
+    state: present
+    update_cache: yes
+- name: Удаление директории /var/backups/sql
+  file:
+    path: /var/backups/sql
+    state: absent
+
+- name: Копирование скриптов бэкапа
+  copy:
+    src: sql
+    dest: /var/backups
+
+- name: Копирование скрипта востановления
+  copy:
+    src: restore.sh
+    dest: /tmp/restore.sh
+    mode: '0755'
+
+- name: Запуск скрипта востановления
+  shell: /tmp/restore.sh

@@ -1,0 +1,6 @@
+- name: Установка node_exporter
+  apt:
+    name: prometheus-node-exporter
+    state: present
+    update_cache: yes
+  notify: Запуск node_exporter

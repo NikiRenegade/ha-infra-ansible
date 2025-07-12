@@ -1,0 +1,8 @@
+- name: Перезапуск systemd и запуск приложения
+  systemd:
+    daemon_reload: yes
+    name: java_app
+    state: restarted
+    enabled: yes
+
+

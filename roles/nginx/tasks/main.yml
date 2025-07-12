@@ -1,0 +1,29 @@
+- name: Получение списка backend IP из группы back
+  set_fact:
+    backend_ips: "{{ groups['back'] }}"
+
+- name: Установка nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Удаление директории /opt/app
+  file:
+    path: /opt/app
+    state: absent
+
+- name: Копирование приложения
+  copy:
+    src: app
+    dest: /opt
+
+- name: Установка конфигурации nginx
+  template:
+    src: default.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Перезапуск nginx
+

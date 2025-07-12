@@ -1,0 +1,24 @@
+- name: Установка openjdk-17-jre
+  apt:
+    name: openjdk-17-jre
+    state: present
+    update_cache: yes
+
+- name: Удаление директории /opt/app
+  file:
+    path: /opt/app
+    state: absent
+
+- name: Копирование приложения
+  copy:
+    src: app
+    dest: /opt
+
+- name: Создание unit файла
+  template:
+    src: java_app.service.j2
+    dest: /etc/systemd/system/java_app.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Перезапуск systemd и запуск приложения

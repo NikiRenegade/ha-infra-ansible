@@ -1,0 +1,26 @@
+- name: Получение IP из группы app
+  set_fact:
+    app_ip: "{{ groups['app'][0] }}"
+
+- name: Установка Apache
+  apt:
+    name: apache2
+    state: present
+    update_cache: yes
+
+
+- name: Установка конфигурации Apache
+  template:
+    src: 000-default.conf.j2
+    dest: /etc/apache2/sites-available/000-default.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Перезапуск apache
+
+- name: Включение проксирования
+  command: a2enmod {{ item }}
+  with_items:
+    - proxy
+    - proxy_http
+  notify: Перезапуск apache

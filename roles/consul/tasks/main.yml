@@ -1,0 +1,37 @@
+- name: Получение списка всех IP для кластера
+  set_fact:
+   consul_ips: "{{ groups['db'] }}"
+
+- name: Создание директорий
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: '0775'
+  loop:
+    - /etc/consul.d
+    - /var/lib/consul
+
+- name: Копирование consul
+  copy:
+    src: consul
+    dest: /usr/bin/consul
+    mode: '0775'
+
+- name: Создание конфигурации Consul
+  template:
+    src: config.json.j2
+    dest: /etc/consul.d/config.json
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
+
+- name: Создание unit файла
+  template:
+    src: consul.service.j2
+    dest: /etc/systemd/system/consul.service
+    owner: ubuntu
+    group: ubuntu
+    mode: '0644'
+  notify: Перезапуск systemd и запуск Consul

@@ -1,0 +1,20 @@
+{
+  "bind_addr": "{{ ansible_host }}",
+  "bootstrap_expect": {{ consul_ips | length }},
+  "client_addr": "0.0.0.0",
+  "data_dir": "/var/lib/consul",
+  "enable_script_checks": true,
+  "dns_config": {
+    "enable_truncate": true,
+    "only_passing": true
+  },
+  "enable_syslog": true,
+  "encrypt": "sfopVuxz9qs7bNgZhG4zH30ewRiPl/JgdC1/zLzOhaQ=",
+  "leave_on_terminate": true,
+  "log_level": "INFO",
+  "rejoin_after_leave": true,
+  "retry_join": {{ consul_ips | difference([ansible_host]) | to_json }},
+  "server": true,
+  "start_join": {{ consul_ips | to_json }},
+  "ui_config": { "enabled": true }
+}

@@ -1,0 +1,12 @@
+- name: Запуск prometheus
+  systemd:
+    name: prometheus
+    state: restarted
+    enabled: yes
+
+- name: Перезапуск systemd и запуск Graphana
+  systemd:
+    daemon_reload: yes
+    name: grafana-server
+    state: restarted
+    enabled: yes

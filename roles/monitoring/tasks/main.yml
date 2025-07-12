@@ -1,0 +1,31 @@
+- name: Получение списка всех ip
+  set_fact:
+    all_ips: "{{ groups['all'] }}"
+
+- name: Установка prometheus
+  apt:
+    name: prometheus
+    state: present
+    update_cache: yes
+
+- name: Установка конфигурации prometheus
+  template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Запуск prometheus
+
+- name: Копирование установочного файла Graphana
+  copy:
+    src: grafana-enterprise_11.6.1_arm64.deb
+    dest: /tmp/grafana-enterprise_11.6.1_arm64.deb
+    mode: '0755'
+
+- name: Установка необходимых пакетов
+  shell: apt-get install -y adduser libfontconfig1 musl
+
+- name: Установка Graphana
+  shell: dpkg -i /tmp/grafana-enterprise_11.6.1_arm64.deb
+  notify: Перезапуск systemd и запуск Graphana

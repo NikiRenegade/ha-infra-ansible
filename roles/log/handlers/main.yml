@@ -1,0 +1,20 @@
+- name: Перезапуск systemd и запуск elasticsearch
+  systemd:
+    daemon_reload: yes
+    name: elasticsearch
+    state: restarted
+    enabled: yes
+
+- name: Перезапуск systemd и запуск kibana
+  systemd:
+    daemon_reload: yes
+    name: kibana
+    state: restarted
+    enabled: yes
+
+- name: Перезапуск systemd и запуск logstash
+  systemd:
+    daemon_reload: yes
+    name: logstash
+    state: restarted
+    enabled: yes

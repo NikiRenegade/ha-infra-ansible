@@ -1,0 +1,35 @@
+- name: Полное удаление postgre
+  hosts: db
+  become: yes
+  tasks:
+
+    - name: Удаление пакетов PostgreSQL
+      apt:
+        name: "postgresql*"
+        state: absent
+        purge: yes
+        autoremove: yes
+        force: yes
+        update_cache: yes
+
+    - name: Удаление директорий PostgreSQL
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /var/lib/postgresql/
+        - /etc/postgresql/
+        - /etc/postgresql-common/
+        - /var/log/postgresql/
+
+    - name: Удаление пользователя postgres
+      user:
+        name: postgres
+        state: absent
+        remove: yes
+
+    - name: Удаление группы postgres
+      group:
+        name: postgres
+        state: absent
+

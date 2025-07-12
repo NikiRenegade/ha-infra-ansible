@@ -1,0 +1,5 @@
+- name: Запуск node_exporter
+  systemd:
+    name: prometheus-node-exporter
+    state: started
+    enabled: yes

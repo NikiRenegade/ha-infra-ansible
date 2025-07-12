@@ -1,0 +1,6 @@
+- name: Перезапуск systemd и запуск Consul
+  systemd:
+    daemon_reload: yes
+    name: consul
+    state: restarted
+    enabled: yes

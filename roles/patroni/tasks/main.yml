@@ -1,0 +1,28 @@
+- name: Остановка PostgreSQL и удаление кластера
+  shell: |
+    systemctl stop postgresql@16-main
+    pg_dropcluster 16 main
+  ignore_errors: yes
+- name: Установка зависимостей
+  apt:
+    name:
+      - python3
+      - git
+    state: present
+    update_cache: true
+
+- name: Установка psycopg2 и patroni
+  apt:
+    name:
+      - python3-psycopg2
+      - patroni
+      - python3-consul
+- name: Создание конфигурации Patroni
+  template:
+    src: config.yml.j2
+    dest: /etc/patroni/config.yml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Перезапуск systemd и запуск Patroni
+

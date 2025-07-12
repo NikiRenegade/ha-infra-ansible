@@ -1,0 +1,5 @@
+- name: Перезапуск HAProxy
+  systemd:
+    name: haproxy
+    state: restarted
+    enabled: yes

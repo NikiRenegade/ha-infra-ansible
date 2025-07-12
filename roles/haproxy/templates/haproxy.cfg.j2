@@ -1,0 +1,36 @@
+ global
+    maxconn 200
+
+defaults
+    log    global
+    mode    tcp
+    retries 2
+    timeout client 30m
+    timeout connect 4s
+    timeout server 30m
+    timeout check 5s
+
+listen primary
+    bind *:5432
+    option httpchk OPTIONS /leader
+    http-check expect status 200
+    default-server inter 3s fall 3 rise 2 on-marked-down shutdown-sessions
+    {% for ip in db_ips %}
+    server {{ ip }} {{ ip }}:5432 maxconn 100 check port 8008
+    {% endfor %}
+
+listen replica
+    balance roundrobin
+    bind *:5433
+    option httpchk OPTIONS /replica
+    http-check expect status 200
+    default-server inter 3s fall 3 rise 2 on-marked-down shutdown-sessions
+    {% for ip in db_ips %}
+    server {{ ip }} {{ ip }}:5432 maxconn 100 check port 8008
+    {% endfor %}
+
+listen stats
+    mode http
+    bind *:5000
+    stats enable
+    stats uri /

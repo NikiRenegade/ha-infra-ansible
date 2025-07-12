@@ -1,0 +1,20 @@
+- name: Получение IP из группы log
+  set_fact:
+    log_ip: "{{ groups['log'][0] }}"
+
+- name: Копирование filebeat
+  copy:
+    src: filebeat-8.9.1-arm64.deb
+    dest: /tmp/filebeat-8.9.1-arm64.deb
+
+- name: Установка filebeat
+  shell: dpkg -i /tmp/filebeat-8.9.1-arm64.deb
+
+- name: Установка конфигурации filebeat
+  template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Перезапуск systemd и запуск filebeat

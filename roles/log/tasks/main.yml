@@ -1,0 +1,66 @@
+- name: Копирование elasticsearch, kibana, logstash
+  copy:
+    src: "{{ item }}"
+    dest: /tmp
+  loop:
+    - elasticsearch-8.9.1-arm64.deb
+    - kibana-8.9.1-arm64.deb
+    - logstash-8.9.1-arm64.deb
+
+- name: Установка default-jdk
+  apt:
+    name: default-jdk
+    state: present
+    update_cache: yes
+
+- name: Установка elasticsearch
+  shell: dpkg -i /tmp/elasticsearch-8.9.1-arm64.deb
+
+- name: Установка конфигурации для ограничения потребления памяти jvm
+  template:
+    src: jvm.options.j2
+    dest: /etc/elasticsearch/jvm.options.d/jvm.options
+    owner: root
+    group: elasticsearch
+    mode: '0644'
+
+- name: Установка конфигурации elasticsearch
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: root
+    group: elasticsearch
+    mode: '0660'
+  notify: Перезапуск systemd и запуск elasticsearch
+
+- name: Установка kibana
+  shell: dpkg -i /tmp/kibana-8.9.1-arm64.deb
+
+- name: Установка конфигурации kibana
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+    owner: root
+    group: kibana
+    mode: '0660'
+  notify: Перезапуск systemd и запуск kibana
+
+- name: Установка logstash
+  shell: dpkg -i /tmp/logstash-8.9.1-arm64.deb
+
+- name: Установка конфигурации logstash
+  template:
+    src: logstash.yml.j2
+    dest: /etc/logstash/logstash.yml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Установка конфигурации logstash conf.d
+  template:
+    src: logstash-http-logs.conf.j2
+    dest: /etc/logstash/conf.d/logstash-http-logs.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Перезапуск systemd и запуск logstash

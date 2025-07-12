@@ -1,0 +1,21 @@
+upstream backend {
+    {% for ip in backend_ips %}
+	 server {{ ip }};
+    {% endfor %}
+}
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+	location / {
+		root /opt/app;
+		index index.html;
+	}
+
+	server_name _;
+
+        location /api {
+		proxy_pass http://backend;
+		proxy_set_header Host $host;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+}

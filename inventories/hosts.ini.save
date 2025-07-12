@@ -1,0 +1,28 @@
+[front]
+10.211.55.78 ansible_user=ubuntu
+
+[back]
+10.211.55.79 ansible_user=ubuntu
+10.211.55.80 ansible_user=ubuntu
+
+[app]
+10.211.55.81 ansible_user=ubuntu
+
+[db]
+10.211.55.83 ansible_user=ubuntu
+10.211.55.84 ansible_user=ubuntu
+10.211.55.85 ansible_user=ubuntu
+
+[haproxy]
+10.211.55.82 ansible_user=ubuntu
+
+[monitoring]
+10.211.55.75 ansible_user=ubuntu
+
+[filebeat]
+10.211.55.61 ansible_user=ubuntu
+10.211.55.58 ansible_user=ubuntu
+10.211.55.60 ansible_user=ubuntu
+
+[log]
+10.211.55.77 ansible_user=ubuntu

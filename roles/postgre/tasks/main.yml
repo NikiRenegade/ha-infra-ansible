@@ -1,0 +1,10 @@
+- name: Копирование скрипта установки PostgreSQL
+  copy:
+    src: pginstall.sh
+    dest: /tmp/pginstall.sh
+    mode: '0755'
+
+- name: Запуск скрипта установки PostgreSQL
+  shell: /tmp/pginstall.sh
+
+  notify: Запуск PostgreSQL

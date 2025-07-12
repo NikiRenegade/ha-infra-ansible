@@ -1,0 +1,73 @@
+- name: Установка и настройка NGINX на фронтенде
+  hosts: front
+  become: yes
+  roles:
+    - { role: nginx, tags: ['nginx'] }
+
+- name: Установка Apache на бэкендах
+  hosts: back
+  become: yes
+  roles:
+    - { role: apache, tags: ['apache'] }
+
+- name: Установка Spring приложения
+  hosts: app
+  become: yes
+  roles:
+    - { role: application, tags: ['application'] }
+
+- name: Установка Consul
+  hosts: db
+  become: true
+  roles:
+    - { role: consul, tags: ['consul'] }
+
+- name: Установка PostgreSQL
+  hosts: db
+  become: true
+  roles:
+    - { role: postgre, tags: ['postgre'] }
+
+- name: Установка Patroni
+  hosts: db
+  become: true
+  roles:
+    - { role: patroni, tags: ['patroni'] }
+
+- name: Установка HAProxy
+  hosts: haproxy
+  become: true
+  roles:
+    - { role: haproxy, tags: ['haproxy'] }
+
+- name: Востановление БД
+  hosts: db
+  become: true
+  roles:
+    - { role: db_restore, tags: ['db_restore'] }
+
+
+- name: Установка node_exporter
+  hosts: all
+  become: true
+  roles:
+    - { role: node_exporter, tags: ['node_exporter'] }
+
+
+- name: Установка prometheus, graphana
+  hosts: monitoring
+  become: true
+  roles:
+    - { role: monitoring, tags: ['monitoring'] }
+
+- name: Установка elasticsearch, kibana, logstash
+  hosts: log
+  become: true
+  roles:
+    - { role: log, tags: ['log'] }
+
+- name: Установка filebeat
+  hosts: filebeat
+  become: true
+  roles:
+    - { role: filebeat, tags: ['filebeat'] }
