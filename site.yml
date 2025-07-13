@@ -10,12 +10,6 @@
   roles:
     - { role: apache, tags: ['apache'] }
 
-- name: Установка Spring приложения
-  hosts: app
-  become: yes
-  roles:
-    - { role: application, tags: ['application'] }
-
 - name: Установка Consul
   hosts: db
   become: true
@@ -46,6 +40,11 @@
   roles:
     - { role: db_restore, tags: ['db_restore'] }
 
+- name: Установка Spring приложения
+  hosts: app
+  become: yes
+  roles:
+    - { role: application, tags: ['application'] }
 
 - name: Установка node_exporter
   hosts: all
