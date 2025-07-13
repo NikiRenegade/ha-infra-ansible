@@ -1,0 +1,1 @@
+# Разработка и автоматизация развёртывания отказоустойчивой инфраструктуры веб-приложения с использованием Ansible и стека NGINX, Apache, Spring Boot, PostgreSQL (Patroni), HAProxy и инструментов мониторинга и логирования Prometheus, Grafana, ELK
